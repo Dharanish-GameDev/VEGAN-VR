@@ -448,7 +448,6 @@ GameObject:
   - component: {fileID: 254505630}
   - component: {fileID: 254505629}
   - component: {fileID: 254505628}
-  - component: {fileID: 254505627}
   m_Layer: 0
   m_Name: Cube(Clone)
   m_TagString: Untagged
@@ -456,21 +455,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &254505627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 254505626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08b8fbe158bfd88439367d0304e02c5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshFilter: {fileID: 254505629}
-  origin: {x: 0, y: 0, z: 0}
-  normal: {x: 0, y: 0.39, z: 0.91}
 --- !u!23 &254505628
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2762,7 +2746,6 @@ GameObject:
   - component: {fileID: 1251618867}
   - component: {fileID: 1251618866}
   - component: {fileID: 1251618865}
-  - component: {fileID: 1251618868}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -2835,21 +2818,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1251618868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1251618861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08b8fbe158bfd88439367d0304e02c5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshFilter: {fileID: 1251618866}
-  origin: {x: 0, y: 0, z: 0}
-  normal: {x: 0, y: 0.39, z: 0.91}
 --- !u!1 &1280032293
 GameObject:
   m_ObjectHideFlags: 0
@@ -3565,7 +3533,6 @@ GameObject:
   - component: {fileID: 1773790660}
   - component: {fileID: 1773790659}
   - component: {fileID: 1773790658}
-  - component: {fileID: 1773790657}
   m_Layer: 0
   m_Name: Cube(Clone)
   m_TagString: Untagged
@@ -3573,21 +3540,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1773790657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1773790656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08b8fbe158bfd88439367d0304e02c5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshFilter: {fileID: 1773790659}
-  origin: {x: 0, y: 0, z: 0}
-  normal: {x: 0, y: 0.39, z: 0.91}
 --- !u!23 &1773790658
 MeshRenderer:
   m_ObjectHideFlags: 0
