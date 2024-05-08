@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using UnityEngine.XR.Interaction.Toolkit;
 
-public class Net_Player : NetworkBehaviour
+public class NetPlayerTransform : NetworkBehaviour
 {
     #region Private Variables
 
@@ -30,10 +29,21 @@ public class Net_Player : NetworkBehaviour
         base.OnNetworkSpawn();
         DisableMesh();
     }
+    private void Awake()
+	{
+
+	}
+	private void Start()
+	{
+
+	}
 	private void Update()
     {
         SyncPositionAndRotation();
     }
+
+
+
     #endregion
 
     #region Private Methods

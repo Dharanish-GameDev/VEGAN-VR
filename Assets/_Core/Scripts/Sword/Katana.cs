@@ -2,13 +2,14 @@ using EzySlice;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class Slicer_Sword : MonoBehaviour
+public class Katana : XRGrabInteractable
 {
-	#region Private Variables
+    #region Private Variables
 
     // Exposed
-	[Header("References")]
+    [Header("References")]
     [SerializeField] private Transform startSlicePoint;
     [SerializeField] private Transform endSlicePoint;
     [SerializeField] private VelocityEstimator velocityEstimator;
@@ -18,7 +19,7 @@ public class Slicer_Sword : MonoBehaviour
     [SerializeField] private Material crossSectionMat;
 
     [Space(10)]
-	[Header("Properties")]
+    [Header("Properties")]
     [SerializeField] private float cutForce;
 
     // Hidden
@@ -34,21 +35,15 @@ public class Slicer_Sword : MonoBehaviour
 
     #region LifeCycle Methods
 
-    private void Awake()
-	{
-
-	}
-	private void Start()
-	{
-
-	}
-	private void FixedUpdate()
-	{
-        hasHit = Physics.Linecast(startSlicePoint.position, endSlicePoint.position, out RaycastHit hit, slicableLayerMask);
-        if (hasHit)
+    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
+    {
+        base.ProcessInteractable(updatePhase);
+        if(isSelected)
         {
-            GameObject targetObj = hit.transform.gameObject;
-            Slice(targetObj);
+            if(updatePhase == XRInteractionUpdateOrder.UpdatePhase.Fixed)
+            {
+                CheckForCuttableHit();
+            }
         }
     }
 
@@ -81,16 +76,25 @@ public class Slicer_Sword : MonoBehaviour
         collider.convex = true;
         rb.AddExplosionForce(cutForce, slicedObject.transform.position, 1);
     }
-
-    #endregion
-
-    #region Public Methods
-
+    private void CheckForCuttableHit()
+    {
+        hasHit = Physics.Linecast(startSlicePoint.position, endSlicePoint.position, out RaycastHit hit, slicableLayerMask);
+        if (hasHit)
+        {
+            GameObject targetObj = hit.transform.gameObject;
+            Slice(targetObj);
+        }
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(startSlicePoint.position, endSlicePoint.position);
     }
+
+    #endregion
+
+    #region Public Methods
+
 
     #endregion
 }
