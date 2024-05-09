@@ -20,6 +20,8 @@ public class XR_RigRef : MonoBehaviour
 	[SerializeField] private XRRayInteractor rightRayInteractor;
 	[SerializeField] private XRRayInteractor leftRayInteractor;
 
+	[SerializeField] private List<Renderer> handRenderers;
+
 	#endregion
 
 	#region Properties
@@ -58,6 +60,19 @@ public class XR_RigRef : MonoBehaviour
 
 	#region Public Methods
 
+	public void ChangeRootPos(Vector3 pos,Quaternion rot)
+	{
+		rootTransform.position = pos;
+		rootTransform.rotation = rot;
+	}
+
+	public void ChangeHandsColorLocally(Color color)
+	{
+		foreach (Renderer renderer in handRenderers)
+		{
+			renderer.material.color = color;
+		}
+	}
 
 	#endregion
 }

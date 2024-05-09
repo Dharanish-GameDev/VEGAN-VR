@@ -9,12 +9,14 @@ public class NetworkHelper : MonoBehaviour
 	#region Private Variables
 
 	[SerializeField] private List<Transform> spawnPointList;
+	[SerializeField] private List<Color> playerColorList;
 
 	#endregion
 
 	#region Properties
 
 	public List <Transform> SpawnPointList => spawnPointList;
+	public List<Color> PlayerColorList => playerColorList;
 
 	#endregion
 

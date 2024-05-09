@@ -27,7 +27,8 @@ public class NetPlayerTransform : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        DisableMesh();
+        ChangePlayerColorOverNet();
+        InitiatePlayer();
     }
     private void Awake()
 	{
@@ -66,13 +67,33 @@ public class NetPlayerTransform : NetworkBehaviour
     }
     private void DisableMesh()
     {
-        if (!IsOwner) return;
         foreach (Renderer mesh in disableMeshList)
         {
             mesh.enabled = false;
         }
     }
-   
+
+    private void ChangePlayerColorOverNet()
+    {
+        foreach (Renderer mesh in disableMeshList)
+        {
+            mesh.material.color = NetworkHelper.instance.PlayerColorList[(int)OwnerClientId];
+        }
+    }
+
+    private void ChangeInitialPlayerPos()
+    {
+        XR_RigRef.instance.ChangeRootPos(NetworkHelper.instance.SpawnPointList[(int)OwnerClientId].position,
+        NetworkHelper.instance.SpawnPointList[(int)OwnerClientId].rotation);
+    }
+
+    private void InitiatePlayer()
+    {
+        if (!IsOwner) return;
+        DisableMesh();
+        ChangeInitialPlayerPos();
+        XR_RigRef.instance.ChangeHandsColorLocally(NetworkHelper.instance.PlayerColorList[(int)OwnerClientId]);
+    }
 
     #endregion
 
