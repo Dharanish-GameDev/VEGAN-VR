@@ -11,7 +11,6 @@ public class NetPlayerTransform : NetworkBehaviour
     [SerializeField] private Transform headTransform;
     [SerializeField] private Transform leftHandTransform;
     [SerializeField] private Transform rightHandTransform;
-
     [SerializeField] private List<Renderer> disableMeshList = new();
 
     #endregion

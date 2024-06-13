@@ -6,16 +6,19 @@ using Unity.Netcode;
 
 public class NetTestUi : MonoBehaviour
 {
+	public static NetTestUi instance { get; private set; }
+
 	#region Private Variables
 
 	[SerializeField] private Button createButton;
 	[SerializeField] private Button joinButton;
+	[SerializeField] private Toggle voiceToggle;
 
 	#endregion
 
 	#region Properties
 
-
+	public Toggle VoiceToggle => voiceToggle; 
 
 	#endregion
 
@@ -23,8 +26,9 @@ public class NetTestUi : MonoBehaviour
 
 	private void Awake()
 	{
+		instance = this;
 		createButton.onClick.AddListener(() => NetworkManager.Singleton.StartHost());
-		joinButton.onClick.AddListener(()=>NetworkManager.Singleton.StartClient());
+		joinButton.onClick.AddListener(() => NetworkManager.Singleton.StartClient());
 	}
 	private void Start()
 	{
@@ -38,7 +42,6 @@ public class NetTestUi : MonoBehaviour
 	#endregion
 
 	#region Private Methods
-
 
 	#endregion
 
