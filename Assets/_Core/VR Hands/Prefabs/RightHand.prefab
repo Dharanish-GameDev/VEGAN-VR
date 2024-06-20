@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 3240524871626806228}
   - component: {fileID: 3240524871636401154}
   - component: {fileID: 6908034343666630057}
+  - component: {fileID: 1917348724059375157}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -390,6 +391,38 @@ MonoBehaviour:
     type: 3}
   triggerInputActionRef: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
+--- !u!114 &1917348724059375157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240524871627034548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d31fc611075d44c971b941aeb9de5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handModelType: 1
+  animator: {fileID: 3240524871636401154}
+  root: {fileID: 3240524871626806228}
+  fingerBonesTransformArray:
+  - {fileID: 3240524871626806244}
+  - {fileID: 3240524871626806250}
+  - {fileID: 3240524871626806248}
+  - {fileID: 3240524871626806252}
+  - {fileID: 3240524871626806258}
+  - {fileID: 3240524871626806256}
+  - {fileID: 3240524871626806260}
+  - {fileID: 3240524871626806266}
+  - {fileID: 3240524871626806264}
+  - {fileID: 3240524871626806270}
+  - {fileID: 3240524871626806210}
+  - {fileID: 3240524871626806208}
+  - {fileID: 3240524871626806214}
+  - {fileID: 3240524871626806218}
+  - {fileID: 3240524871626806216}
+  - {fileID: 3240524871626806222}
 --- !u!1 &3240524871627034550
 GameObject:
   m_ObjectHideFlags: 0
