@@ -1,21 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Vivox;
 using UnityEngine;
+using VeganVR.UI;
 
 namespace VeganVR.VoiceChat
 {
     public class PlayerVoiceChatInitiator : NetworkBehaviour
     {
+
         #region Private Variables
 
+        string displayName;
+        private VivoxParticipant voiceChatParticipant;
+        private PlayerDetailsUI playerDetailsUI;
 
         #endregion
 
         #region Properties
 
-
-
+        public VivoxParticipant VoiceChatParticipant => voiceChatParticipant;
         #endregion
 
         #region LifeCycle Methods
@@ -23,16 +26,21 @@ namespace VeganVR.VoiceChat
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if (NetTestUi.instance.VoiceToggle.isOn)
+            if (!IsOwner) return;
+            if (NetworkUI.Instance.VoiceToggle.isOn)
             {
-                NetworkManager.Singleton.GetComponent<VivoxPlayer>().LoginToVivoxAsync("Player : " + OwnerClientId);
+                VivoxPlayer.Instance.LoginToVivoxAsync();
             }
             else
             {
                 Debug.Log("Player Decided not to Join in Voice Chat");
             }
-            NetTestUi.instance.VoiceToggle.onValueChanged.AddListener(VoiceToggleValueChanged);
+            NetworkUI.Instance.VoiceToggle.onValueChanged.AddListener(VoiceToggleValueChanged);
+            playerDetailsUI = GetComponent<PlayerDetailsUI>();
         }
+
+
+        
         #endregion
 
         #region Private Methods
@@ -42,7 +50,7 @@ namespace VeganVR.VoiceChat
             Debug.Log($"Voice Toggle Value :{value}");
             if (value)
             {
-                //NetworkManager.Singleton.GetComponent<VivoxPlayer>().LoginToVivoxAsync("Player : " + OwnerClientId);
+                //NetworkManager.Singleton.GetComponent<VivoxPlayer>().Join3DChannelAsync();
             }
             else
             {

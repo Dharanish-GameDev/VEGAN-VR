@@ -5,16 +5,22 @@ using Unity.Services.Vivox;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
 using UnityEngine.Android;
+using System;
+using Unity.Netcode;
 
 namespace VeganVR.VoiceChat
 {
     public class VivoxPlayer : MonoBehaviour
     {
+        public static VivoxPlayer Instance { get; private set; }
+
+        public event Action OnVivoxInitiated;
+
         #region Private Variables
 
         [SerializeField] private Transform vrHeadTransform;
 
-        private string gameVoiceChannel = "VeganVR_VoiceChannel";
+        private readonly string gameVoiceChannel = "VeganVR_VoiceChannel";
 
         private Channel3DProperties player3DProperties;
 
@@ -34,35 +40,45 @@ namespace VeganVR.VoiceChat
 
         #region LifeCycle Methods
 
+        private void Awake()
+        {
+            Instance = this;
+        }
         private void Start()
         {
-            InitializeAsync();
+            //AuthenticateServies();
+
             VivoxService.Instance.LoggedIn += VivoxLoggedIn;
             VivoxService.Instance.LoggedOut += VivoxLoggedOut;
-            VivoxService.Instance.ParticipantAddedToChannel += Instance_ParticipantAddedToChannel;
-            VivoxService.Instance.ChannelJoined += Instance_ChannelJoined;
+            VivoxService.Instance.ChannelLeft += VivoxChannelLeft;
+            VivoxService.Instance.ConnectionFailedToRecover += Vivox_ConnectionFailedToRecover;
 
+            VivoxService.Instance.ChannelJoined += VivoxChannelJoined;
         }
 
-        private void Instance_ChannelJoined(string obj)
+        
+
+        private void OnDisable()
         {
-            Debug.Log($"Channel Joined with the name of : {obj}");
-            isJoinedChannel = true;
-            Debug.Log($"IsJoinedChannel : {isJoinedChannel}");
+            VivoxService.Instance.ChannelJoined -= VivoxChannelJoined;
+            VivoxService.Instance.LoggedIn -= VivoxLoggedIn;
+            VivoxService.Instance.LoggedOut -= VivoxLoggedOut;
         }
-
-        private void Instance_ParticipantAddedToChannel(VivoxParticipant obj)
-        {
-            Debug.Log($"Vivox DisplayName : {obj.DisplayName}");
-        }
-
         private void Update()
         {
             if (!isJoinedChannel) return;
 
             if (Time.time > nextPosUpdate)
             {
-                VivoxService.Instance.Set3DPosition(vrHeadTransform.gameObject, gameVoiceChannel);
+                try
+                {
+                    VivoxService.Instance.Set3DPosition(vrHeadTransform.gameObject, gameVoiceChannel);
+                }
+                catch(Exception ex)
+                {
+                    Debug.Log(ex);
+                }
+                
                 nextPosUpdate += 0.5f;
             }
         }
@@ -71,20 +87,37 @@ namespace VeganVR.VoiceChat
 
         #region Private Methods
 
-        private async void InitializeAsync()
+        public async void AuthenticateServies(string playerName)
         {
-            await UnityServices.InitializeAsync();
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            await VivoxService.Instance.InitializeAsync();
+            InitializationOptions initializationOptions = new InitializationOptions();
+            initializationOptions.SetProfile(playerName);
 
-            Debug.Log("Vivox Initialization Successfull");
+            await UnityServices.InitializeAsync(initializationOptions);
+
+            AuthenticationService.Instance.SignedIn += () => {
+                // do nothing
+                Debug.Log("Signed in! " + AuthenticationService.Instance.PlayerId);
+
+            };
+
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            try
+            {
+                await VivoxService.Instance.InitializeAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+
+            OnVivoxInitiated?.Invoke();
+
         }
         private void VivoxLoggedIn()
         {
             if (VivoxService.Instance.IsLoggedIn)
             {
-                Debug.Log("Successfully connected to Vivox");
-                Debug.Log("Joining voice channel: " + gameVoiceChannel);
+                Debug.Log("<color=red>Successfully connected to Vivox</color>");
                 Join3DChannelAsync();
             }
             else
@@ -93,24 +126,53 @@ namespace VeganVR.VoiceChat
             }
         }
 
-        private async void VivoxLoginAsync(string displayName)
-        {
-            LoginOptions loginOptions = new LoginOptions();
-            loginOptions.DisplayName = displayName;
-            await VivoxService.Instance.LoginAsync(loginOptions);
+        private async void VivoxLoginAsync()
+        {   
+            try
+            {
+                await VivoxService.Instance.LoginAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+            
         }
+
         private async void VivoxLoggedOut()
         {
             LeaveChannelAsync();
-            await VivoxService.Instance.LogoutAsync();
+            try
+            {
+                await VivoxService.Instance.LogoutAsync();
+            }
+            catch(Exception e)
+            {
+                Debug.Log(e);
+            }
+           
             Debug.Log("Vivox : LoggedOut From Vivox");
+        }
+
+        private void VivoxChannelLeft(string obj)
+        {
+            isJoinedChannel = false;
+        }
+
+        private void VivoxChannelJoined(string obj)
+        {
+            isJoinedChannel = true;
+        }
+        private void Vivox_ConnectionFailedToRecover()
+        {
+            isJoinedChannel = false;
         }
 
         #endregion
 
         #region Public Methods
 
-        public void LoginToVivoxAsync(string displayName)
+        public void LoginToVivoxAsync()
         {
 
 #if (UNITY_ANDROID && !UNITY_EDITOR) || __ANDROID__
@@ -178,43 +240,85 @@ namespace VeganVR.VoiceChat
 
             if (IsMicPermissionGranted())
             {
-                VivoxLoginAsync(displayName);
+                VivoxLoginAsync();
             }
             else
             {
                 if (IsPermissionsDenied())
                 {
                     PermissionAskedCount = 0;
-                    VivoxLoginAsync(displayName);
+                    VivoxLoginAsync();
                 }
                 else
                 {
                     AskForPermissions();
-                    VivoxLoginAsync(displayName);
+                    VivoxLoginAsync();
                 }
             }
 
         }
         public void MuteUserMic()
         {
-            VivoxService.Instance.MuteInputDevice();
+           VivoxService.Instance.UnmuteInputDevice();
+            Debug.Log("Muted Mic");
         }
         public void UnMuteUserMic()
         {
             VivoxService.Instance.UnmuteInputDevice();
+            Debug.Log("UnMuted Mic");
         }
 
         public async void Join3DChannelAsync()
         {
-            await VivoxService.Instance.JoinPositionalChannelAsync(gameVoiceChannel, ChatCapability.AudioOnly, player3DProperties);
-            Debug.Log("Vivox : Successfully Joined 3D Channel");
+            try
+            {
+                Debug.Log("<color=yellow>Joining Voice Channel!</color>");
+                await VivoxService.Instance.JoinPositionalChannelAsync(gameVoiceChannel, ChatCapability.AudioOnly, player3DProperties);
+                Debug.Log("<color=green>Joined Voice Channel!</color>");
+            }
+            catch (Exception ex)
+            {
+                Debug.Log(ex);
+            }
+           
         }
 
         public async void LeaveChannelAsync()
         {
-            await VivoxService.Instance.LeaveAllChannelsAsync();
-            Debug.Log("Vivox: Left All Channels");
-            isJoinedChannel = false;
+            try
+            {
+                await VivoxService.Instance.LeaveAllChannelsAsync();
+                Debug.Log("Vivox: Left All Channels");
+                isJoinedChannel = false;
+            }
+            catch(Exception ex)
+            {
+                Debug.Log(ex);
+            }
+            
+        }
+
+        public async void SetActiveInputDevice(int deviceIndex)
+        {
+            if (deviceIndex >= 0 && deviceIndex < VivoxService.Instance.AvailableInputDevices.Count)
+            {
+                try
+                {
+                    var device = VivoxService.Instance.AvailableInputDevices[deviceIndex];
+                    Debug.Log("Setting active input device to: " + device.DeviceName);
+                    await VivoxService.Instance.SetActiveInputDeviceAsync(device);
+                    Debug.Log("Active input device is now: " + VivoxService.Instance.ActiveInputDevice.DeviceName);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log(ex);
+                }
+                
+            }
+            else
+            {
+                Debug.LogError("Invalid device index");
+            }
         }
 
         #endregion
