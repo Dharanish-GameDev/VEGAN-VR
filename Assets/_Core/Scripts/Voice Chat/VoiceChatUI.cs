@@ -4,26 +4,21 @@ using TMPro;
 using Unity.Services.Vivox;
 using UnityEngine;
 using UnityEngine.UI;
+using VeganVR.UI;
 
 namespace VeganVR.VoiceChat
 {
     public class VoiceChatUI : MonoBehaviour
     {
         #region Private Variables
-        [Header("Voice Input")]
+
+        [Header("Voice Chat")]
+        [SerializeField] private Button voiceChatToggleButton;
+        [SerializeField] private GameObject vCEnableIcon;
+        [SerializeField] private GameObject vCDisableIcon;
         [SerializeField] private TMP_Dropdown micSelectionDropDown;
 
-        [Header("Speech Dedection")]
-        [SerializeField] private Image speechDedectorImage;
-        [SerializeField] private Sprite speakingSprite;
-        [SerializeField] private Sprite notSpeakingSprite;
-
-        [SerializeField] private Image deviceEnergyMask;
-
-
-
-        private VivoxParticipant vivoxParticipant;
-        const float k_voiceMeterSpeed = 3;
+        private bool isVoiceChatEnabled = true;
         #endregion
 
         #region Properties
@@ -36,20 +31,12 @@ namespace VeganVR.VoiceChat
 
         private void Awake()
         {
-
+            voiceChatToggleButton.onClick.AddListener(() => ToggleVoiceChat());
+            micSelectionDropDown.gameObject.SetActive(false);
         }
         private void Start()
         {
-            VivoxPlayer.Instance.OnVivoxInitiated += VivoxPlayer_OnVivoxInitiated;
-        }
-        private void Update()
-        {
-            //if (VivoxService.Instance.ActiveChannels.Count > 0)
-            //{
-            //    var channel = VivoxService.Instance.ActiveChannels.FirstOrDefault();
-            //    var localParticipant = channel.Value.FirstOrDefault(p => p.IsSelf);
-            //    deviceEnergyMask.fillAmount = Mathf.Lerp(deviceEnergyMask.fillAmount, (float)localParticipant.AudioEnergy*1.2f, Time.deltaTime * k_voiceMeterSpeed);
-            //}
+            VivoxPlayer.Instance.OnVivoxInitiated += UpdateMicInputDropdown;
         }
 
         #endregion
@@ -60,8 +47,9 @@ namespace VeganVR.VoiceChat
         {
             VivoxPlayer.Instance.SetActiveInputDevice(dropdown.value);
         }
-        private void VivoxPlayer_OnVivoxInitiated()
+        private void UpdateMicInputDropdown()
         {
+            micSelectionDropDown.gameObject.SetActive(true);
             micSelectionDropDown.options.Clear();
             List<string> MicNamesList = new List<string>();
             for (int i = 0; i < VivoxService.Instance.AvailableInputDevices.Count; i++)
@@ -76,40 +64,27 @@ namespace VeganVR.VoiceChat
             VivoxPlayer.Instance.SetActiveInputDevice(micSelectionDropDown.value); // Sets 0 as the Initial Mic to Vivox
 
             micSelectionDropDown.onValueChanged.AddListener(delegate { DropDownValueChanged(micSelectionDropDown); });
-
-            //VivoxService.Instance.ParticipantAddedToChannel += Vivox_ParticipantAddedToChannel;
-            //deviceEnergyMask.fillAmount = 0;
         }
-
-        private void Vivox_ParticipantAddedToChannel(VivoxParticipant participant)
+        private void EnableAndDisableVcIcon(bool value)
         {
-            vivoxParticipant = participant;
-            vivoxParticipant.ParticipantSpeechDetected += ChangeSpeechDedectorSprite;
-            vivoxParticipant.ParticipantMuteStateChanged += ChangeSpeechDedectorSprite;
-        }
-
-
-        private void SpeechDedected()
-        {
-            Debug.Log("Speech Dedected");
-        }
-
-        private void MuteStateChanged()
-        {
-            Debug.Log("Mute State Changed");
-        }
-
-        private void ChangeSpeechDedectorSprite()
-        {
-            if (vivoxParticipant.SpeechDetected)
+            if (value)
             {
-                speechDedectorImage.sprite = speakingSprite;
-                speechDedectorImage.gameObject.transform.localScale = Vector3.one;
+                vCEnableIcon.SetActive(true);
+                vCDisableIcon.SetActive(false);
+                Debug.Log("VC Enabled");
             }
             else
             {
-                speechDedectorImage.sprite = notSpeakingSprite;
+                vCEnableIcon.SetActive(false);
+                vCDisableIcon.SetActive(true);
+                Debug.Log("VC Disabled");
             }
+        }
+        private void ToggleVoiceChat()
+        {
+            isVoiceChatEnabled = !isVoiceChatEnabled;
+            EnableAndDisableVcIcon(isVoiceChatEnabled);
+            NetworkUI.Instance.EnableAndDisableVoiceChat(isVoiceChatEnabled);
         }
         #endregion
 

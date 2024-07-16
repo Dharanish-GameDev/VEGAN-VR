@@ -10,13 +10,21 @@ public class NetworkHelper : MonoBehaviour
 	#region Private Variables
 
 	[SerializeField] private List<Transform> spawnPointList;
-	[SerializeField] private List<Color> playerColorList;
+    [SerializeField] private List<Color> playerColorList;
+
+	[Header("Arena SpawnPoints")]
+	[Space(10)]
+    [SerializeField] private Transform attackingPoint;
+	[SerializeField] private Transform defendingPoint;
+
 
 	#endregion
 
 	#region Properties
 
 	public List <Transform> SpawnPointList => spawnPointList;
+	public Transform AttackingPoint => attackingPoint;
+	public Transform DefendingPoint => defendingPoint;
 	public List<Color> PlayerColorList => playerColorList;
 
 	#endregion

@@ -764,6 +764,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 9b7a416cf43db9d4f83f828e87359457,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9b7a416cf43db9d4f83f828e87359457,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8e3aeda23d20122498e95e3a9e93a500, type: 2}
@@ -797,6 +802,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4419749416470789845}
     m_Modifications:
+    - target: {fileID: -2462574668600849147, guid: ce58c42775bf24d448eed1c1eff13488,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 73090988
+      objectReference: {fileID: 0}
+    - target: {fileID: 9025872721910624186, guid: ce58c42775bf24d448eed1c1eff13488,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9025872721913446060, guid: ce58c42775bf24d448eed1c1eff13488,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -852,7 +867,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftHand
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -2462574668600849147, guid: ce58c42775bf24d448eed1c1eff13488, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -883,6 +899,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7100765536680836016}
     m_Modifications:
+    - target: {fileID: -1948691308561958298, guid: 33a2f824336eeef4da3e47ef72de4e35,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2407434813
+      objectReference: {fileID: 0}
+    - target: {fileID: 5426100377516351852, guid: 33a2f824336eeef4da3e47ef72de4e35,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5426100377519467546, guid: 33a2f824336eeef4da3e47ef72de4e35,
         type: 3}
       propertyPath: m_Name
@@ -938,7 +964,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -1948691308561958298, guid: 33a2f824336eeef4da3e47ef72de4e35, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

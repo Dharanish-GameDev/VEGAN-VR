@@ -5,12 +5,12 @@ public class CustomClientNetworkTransform : NetworkBehaviour
 {
     private Vector3 networkPosition;
     private Quaternion networkRotation;
+    
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
     }
-
     private void Update()
     {
         if (IsOwner) 

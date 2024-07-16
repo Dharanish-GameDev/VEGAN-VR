@@ -69,8 +69,8 @@ namespace VeganVR.Player.Network
 
         private void ChangeInitialPlayerPos()
         {
-            XR_RigRef.instance.ChangeRootPos(NetworkHelper.Instance.SpawnPointList[(int)OwnerClientId].position,
-            NetworkHelper.Instance.SpawnPointList[(int)OwnerClientId].rotation);
+            XR_RigRef.instance.ChangeRootPos(NetworkHelper.Instance.SpawnPointList[(int)OwnerClientId]);
+            GameflowManager.Instance.ChangeIsFirstSpawnNearSideSelectionUiCompletedToTrue();
         }
 
         #endregion

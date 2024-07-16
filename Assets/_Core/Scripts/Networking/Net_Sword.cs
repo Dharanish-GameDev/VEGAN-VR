@@ -6,44 +6,57 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(XRGrabInteractable))]
 public class Net_Sword : NetworkBehaviour
 {
-    public void DestroySlicableObject(Slicable obj)
-    {
-        RequestDestroyServerRpc(obj.NetworkObject);
-    }
-
     [ServerRpc(RequireOwnership = false)]
-    private void RequestDestroyServerRpc(NetworkObjectReference networkObjectReference)
+    private void DisableSlicableServerRpc(ulong networkObjectId)
     {
-        if (!IsServer) return;
-        if (networkObjectReference.TryGet(out NetworkObject networkObject))
+        NetworkObject netObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
+        if (netObject != null)
         {
-            DestroyNetworkObject(networkObject.GetComponent<Slicable>());
-        }
-    }
-
-    private void DestroyNetworkObject(Slicable slicable)
-    {
-        if (IsServer)
-        {
-            // Notify clients that this object is being destroyed
-            DestroyClientRpc(slicable.NetworkObject);
-
-            // Destroy the object on the server
-            Destroy(slicable.gameObject);
-        }
-    }
-
-    [ClientRpc]
-    private void DestroyClientRpc(NetworkObjectReference networkObjectReference)
-    {
-        if (!IsServer)
-        {
-            if (networkObjectReference.TryGet(out NetworkObject networkObject))
+            SlicableTest slicable = netObject.GetComponent<SlicableTest>();
+            if (slicable != null)
             {
-                // Destroy the object on the client
-                Destroy(networkObject.gameObject);
+                print("Disabled the Slicable by Server from the Client Request");
+                slicable.TurnOffSlicable();
+                DisableSlicableClientRpc(networkObjectId);
             }
         }
     }
 
+    [ClientRpc]
+    private void DisableSlicableClientRpc(ulong networkObjectId)
+    {
+        NetworkObject netObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
+        if (netObject != null)
+        {
+            SlicableTest slicable = netObject.GetComponent<SlicableTest>();
+            if (slicable != null)
+            {
+                print("Disabled the Slicable by Server from the Server Request");
+                slicable.TurnOffSlicable();
+            }
+        }
+    }
+
+    public void DisableSlicable(ulong networkObjectId)
+    {
+        if (IsServer)
+        {
+            // If this instance is the server, disable the slicable directly
+            NetworkObject netObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
+            if (netObject != null)
+            {
+                SlicableTest slicable = netObject.GetComponent<SlicableTest>();
+                if (slicable != null)
+                {
+                    slicable.TurnOffSlicable();
+                    DisableSlicableClientRpc(networkObjectId);
+                }
+            }
+        }
+        else if (IsClient)
+        {
+            // If this instance is a client, request the server to disable the slicable
+            DisableSlicableServerRpc(networkObjectId);
+        }
+    }
 }

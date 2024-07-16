@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using Unity.Services.Lobbies.Models;
+using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace VeganVR.Player.Local
@@ -20,6 +23,8 @@ namespace VeganVR.Player.Local
 
         [SerializeField] private XRRayInteractor rightRayInteractor;
         [SerializeField] private XRRayInteractor leftRayInteractor;
+
+        [SerializeField] private XROrigin XROrigin;
 
         [SerializeField] private List<Renderer> handRenderers;
 
@@ -61,12 +66,18 @@ namespace VeganVR.Player.Local
 
         #region Public Methods
 
-        public void ChangeRootPos(Vector3 pos, Quaternion rot)
+        public void ChangeRootPos(Transform tpTransform)
         {
-            rootTransform.position = pos;
-            rootTransform.rotation = rot;
+            rootTransform.position = tpTransform.position;
+            rootTransform.rotation = tpTransform.rotation;
+
+            headTransform.localRotation = tpTransform.localRotation;
         }
 
+        public void ChangePlayerPos(Vector3 targetPos)
+        {
+            rootTransform.position = targetPos;
+        }
         public void ChangeHandsColorLocally(Color color)
         {
             foreach (Renderer renderer in handRenderers)

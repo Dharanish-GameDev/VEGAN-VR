@@ -27,8 +27,8 @@ public class DrawTrajectory : MonoBehaviour
     {
         lineRenderer.positionCount = (int)numPoints;
         List<Vector3> points = new List<Vector3>();
-        Vector3 startingPosition = cannonController.ShotPoint.position;
-        Vector3 startingVelocity = cannonController.ShotPoint.up * cannonController.BlastPower;
+        Vector3 startingPosition = cannonController.ShotPointTransform.position;
+        Vector3 startingVelocity = cannonController.ShotPointTransform.up * cannonController.BlastPower;
         for (float t = 0; t < numPoints; t += timeBetweenPoints)
         {
             Vector3 newPoint = startingPosition + t * startingVelocity;

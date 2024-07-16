@@ -305,9 +305,7 @@ namespace VeganVR.VoiceChat
                 try
                 {
                     var device = VivoxService.Instance.AvailableInputDevices[deviceIndex];
-                    Debug.Log("Setting active input device to: " + device.DeviceName);
                     await VivoxService.Instance.SetActiveInputDeviceAsync(device);
-                    Debug.Log("Active input device is now: " + VivoxService.Instance.ActiveInputDevice.DeviceName);
                 }
                 catch (Exception ex)
                 {

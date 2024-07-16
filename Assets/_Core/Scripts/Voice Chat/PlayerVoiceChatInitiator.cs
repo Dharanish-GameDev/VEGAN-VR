@@ -12,7 +12,6 @@ namespace VeganVR.VoiceChat
 
         string displayName;
         private VivoxParticipant voiceChatParticipant;
-        private PlayerDetailsUI playerDetailsUI;
 
         #endregion
 
@@ -27,16 +26,14 @@ namespace VeganVR.VoiceChat
         {
             base.OnNetworkSpawn();
             if (!IsOwner) return;
-            if (NetworkUI.Instance.VoiceToggle.isOn)
+            if (NetworkUI.Instance.IsVoiceChatEnabled)
             {
                 VivoxPlayer.Instance.LoginToVivoxAsync();
             }
             else
             {
-                Debug.Log("Player Decided not to Join in Voice Chat");
+                //Debug.Log("Player Decided not to Join in Voice Chat");
             }
-            NetworkUI.Instance.VoiceToggle.onValueChanged.AddListener(VoiceToggleValueChanged);
-            playerDetailsUI = GetComponent<PlayerDetailsUI>();
         }
 
 
@@ -45,18 +42,6 @@ namespace VeganVR.VoiceChat
 
         #region Private Methods
 
-        private void VoiceToggleValueChanged(bool value)
-        {
-            Debug.Log($"Voice Toggle Value :{value}");
-            if (value)
-            {
-                //NetworkManager.Singleton.GetComponent<VivoxPlayer>().Join3DChannelAsync();
-            }
-            else
-            {
-                NetworkManager.Singleton.GetComponent<VivoxPlayer>().LeaveChannelAsync();
-            }
-        }
 
         #endregion
 

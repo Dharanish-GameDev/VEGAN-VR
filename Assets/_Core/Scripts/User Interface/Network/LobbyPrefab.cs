@@ -22,8 +22,12 @@ public class LobbyPrefab : MonoBehaviour
 
     private void Awake()
     {
-        joinButton.onClick.AddListener(() => NetworkUI.Instance.JoinLobby(lobby));
-        startButton.onClick.AddListener(() => NetworkUI.Instance.StartGame());
+        joinButton.onClick.AddListener(() =>
+        {
+            LobbyManager.Instance.JoinLobby(lobby);
+            joinButton.interactable = false;
+        });
+        startButton.onClick.AddListener(() => LobbyManager.Instance.StartGame());
     }
 
     #region Public Methods
@@ -35,7 +39,18 @@ public class LobbyPrefab : MonoBehaviour
         availableSlotsText.text = lobby.AvailableSlots.ToString() + " Slots";
         if(isOwnerOfTheLobby)
         {
-            joinButton.gameObject.SetActive(false);
+            if(joinButton)
+            {
+                joinButton.gameObject.SetActive(false);
+            }
+            if(lobby.AvailableSlots == 0)
+            {
+                startButton.interactable = true;
+            }
+            else
+            {
+                startButton.interactable = false;
+            }
         }
         else
         {

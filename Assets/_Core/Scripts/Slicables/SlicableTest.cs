@@ -1,66 +1,85 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class SlicableTest : MonoBehaviour
+public class SlicableTest : NetworkBehaviour
 {
-	#region Private Variables
+    #region Private Variables
 
-	[SerializeField] private Rigidbody rb;
-	[SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Collider slicablecollider;
 
-	#endregion
+    private CannonController cannonController;
+    private SlicableStateEnum slicableState = SlicableStateEnum.Available;
 
-	#region Properties
+    #endregion
 
-	public Rigidbody Rb => rb;
+    #region Properties
 
-	#endregion
+    public SlicableStateEnum SlicableState => slicableState;
 
-	#region LifeCycle Methods
+    public bool IsThrowableAvailable => slicableState == SlicableStateEnum.Available;
 
-	private void Awake()
-	{
-		TurnOffMesh();
-    }
-	private void Start()
-	{
+    #endregion
 
-	}
-	private void Update()
-	{
+    #region LifeCycle Methods
 
-	}
-	
-	#endregion
-
-	#region Private Methods
-
-
-	#endregion
-
-	#region Public Methods
-
-	public void TurnOffMesh()
-	{
-		meshRenderer.enabled = false;
-		rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.useGravity = false;
-	}
-
-	public void TurnOnMesh()
-	{
-		meshRenderer.enabled = true;
-		rb.useGravity = true;
-        Invoke(nameof(TurnOffMesh), 2);
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        cannonController = CannonController.Instance;
+        TurnOffSlicable();
     }
 
-	public void TransformToShotPoint(Transform pointTransform)
-	{
-		transform.position = pointTransform.position;
-		transform.rotation = pointTransform.rotation;
-	}
+    #endregion
 
-	#endregion
+    #region Private Methods
+
+   
+
+    private void TurnOnSlicable()
+    {
+        meshRenderer.enabled = true;
+        rb.isKinematic = false;
+        slicablecollider.enabled = true;
+    }
+
+    private void TransformToShotPoint()
+    {
+        transform.position = cannonController.ShotPointTransform.position;
+        transform.rotation = cannonController.ShotPointTransform.rotation;
+    }
+    private void ChangeSlicableState(SlicableStateEnum state)
+    {
+        slicableState = state;
+    }
+
+    #endregion
+
+    #region Public Methods
+    public void ShootThisSlicable()
+    {
+        TransformToShotPoint();
+        TurnOnSlicable();
+        rb.velocity = cannonController.ShotPointTransform.up * cannonController.BlastPower;
+        ChangeSlicableState(SlicableStateEnum.Travelling);
+    }
+    public void TurnOffSlicable()
+    {
+        meshRenderer.enabled = false;
+        slicablecollider.enabled = false;
+        rb.isKinematic = true;
+        ChangeSlicableState(SlicableStateEnum.Available);
+    }
+    public void TurnOffColliderLocally()
+    {
+        slicablecollider.enabled = false;
+    }
+    #endregion
+}
+
+public enum SlicableStateEnum
+{
+    Available,
+    Travelling,
 }

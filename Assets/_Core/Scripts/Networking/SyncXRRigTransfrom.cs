@@ -16,12 +16,14 @@ namespace VeganVR.Player.Network
 
         private Vector3 playerUiOffset = new Vector3(0,0.65f,0);
         private Transform anotherPlayerHeadTransform;
+        private XR_RigRef xrRigRef = null;
         #endregion
 
         #region Properties
 
         public Transform HeadTransform => headTransform;
 
+        public XR_RigRef RigRef => xrRigRef;
         #endregion
 
         #region LifeCycle Methods
@@ -30,6 +32,7 @@ namespace VeganVR.Player.Network
         {
             base.OnNetworkSpawn();
             NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
+            xrRigRef = XR_RigRef.instance;
         }
 
         

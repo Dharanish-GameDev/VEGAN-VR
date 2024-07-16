@@ -86,8 +86,14 @@ public class Katana : XRGrabInteractable
             GameObject lowerHull = hull.CreateLowerHull(target, crossSectionMat);
             SetUpSlicedObject(lowerHull);
 
-            Slicable slicabble = target.GetComponent<Slicable>();
-            netSword.DestroySlicableObject(slicabble);
+            Destroy(upperHull,1f);  // Destroying the generated hulls 
+            Destroy(lowerHull,1f);
+
+            SlicableTest slicable = target.GetComponent<SlicableTest>();
+            slicable.TurnOffColliderLocally();
+
+            netSword.DisableSlicable(slicable.NetworkObjectId);
+            
         }
     }
 
