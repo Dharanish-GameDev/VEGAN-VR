@@ -128,7 +128,7 @@ namespace EzySlice {
                 return null;
             }
 
-            GameObject newObject = new GameObject(name);
+            GameObject newObject = new UnityEngine.GameObject(name);
 
             newObject.AddComponent<MeshRenderer>();
             MeshFilter filter = newObject.AddComponent<MeshFilter>();

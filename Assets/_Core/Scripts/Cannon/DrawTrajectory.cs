@@ -5,7 +5,7 @@ using UnityEngine;
 public class DrawTrajectory : MonoBehaviour
 {
 
-    CannonController cannonController;
+    [SerializeField] CannonController cannonController;
     LineRenderer lineRenderer;
 
     // Number of points on the line
@@ -18,12 +18,16 @@ public class DrawTrajectory : MonoBehaviour
     public LayerMask CollidableLayers;
     void Start()
     {
-        cannonController = GetComponent<CannonController>();
         lineRenderer = GetComponent<LineRenderer>();
     }
 
 
     void Update()
+    {
+        DrawProjectile();
+    }
+
+    public void DrawProjectile()
     {
         lineRenderer.positionCount = (int)numPoints;
         List<Vector3> points = new List<Vector3>();

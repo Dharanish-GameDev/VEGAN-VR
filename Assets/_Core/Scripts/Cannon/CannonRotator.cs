@@ -5,6 +5,8 @@ using QFSW.QC;
 
 public class CannonRotator : NetworkBehaviour
 {
+    public static CannonRotator Instance { get; private set; }
+
     public enum OperatingPlatform
     {
         Oculus,
@@ -18,6 +20,7 @@ public class CannonRotator : NetworkBehaviour
     public float minPitch = -10f; // Minimum pitch rotation angle for the cannon
     public float maxPitch = 30f;  // Maximum pitch rotation angle for the cannon
     public OperatingPlatform operatingPlatform;
+    [SerializeField] private UnityEngine.GameObject drawTrajectoryGameObj;
 
     private bool leftGrabbed = false;
     private bool rightGrabbed = false;
@@ -66,29 +69,22 @@ public class CannonRotator : NetworkBehaviour
         rightHand = null;
     }
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         if (IsOwner)
         {
             // Initial ownership setup
             hasOwnership = true;
         }
     }
+    private void Start()
+    {
+        Instance = this;
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            if (hasOwnership)
-            {
-                ReleaseOwnershipServerRpc();
-            }
-            else
-            {
-                RequestOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
-            }
-        }
-
         if (!IsOwner) return;
 
         switch (operatingPlatform)
@@ -195,29 +191,6 @@ public class CannonRotator : NetworkBehaviour
         }
     }
 
-    // Server RPC to request ownership change
-    [ServerRpc(RequireOwnership = false)]
-    private void RequestOwnershipServerRpc(ulong clientId)
-    {
-        if (IsServer)
-        {
-            NetworkObject.ChangeOwnership(clientId);
-            hasOwnership = true;
-            UpdateOwnershipClientRpc(true, clientId); // Pass clientId to update ownership
-        }
-    }
-
-    // Server RPC to release ownership
-    [ServerRpc(RequireOwnership = false)]
-    private void ReleaseOwnershipServerRpc()
-    {
-        if (IsServer && hasOwnership)
-        {
-            NetworkObject.RemoveOwnership();
-            hasOwnership = false;
-            UpdateOwnershipClientRpc(false, 0); // Pass 0 to indicate no owner
-        }
-    }
 
     // Client RPC to update ownership status
     [ClientRpc]
@@ -233,10 +206,16 @@ public class CannonRotator : NetworkBehaviour
             leftHand = null;
             rightHand = null;
         }
-
-        //Debug.Log($"Cannon Ownership changed to, Owner Client Id: {ownerId}");
+        EnableAndDisableDrawTrajectory(false);
+        if (IsOwner)
+        {
+            EnableAndDisableDrawTrajectory(true);
+        }
+        
+        
     }
-    [Command]
+
+
     // Method to transfer ownership to a specific client
     public void TransferCannonOwnershipToClient(ulong clientId)
     {
@@ -246,5 +225,11 @@ public class CannonRotator : NetworkBehaviour
             hasOwnership = true;
             UpdateOwnershipClientRpc(true, clientId); // Pass clientId to update ownership
         }
+    }
+
+
+    public void EnableAndDisableDrawTrajectory(bool value)
+    {
+        drawTrajectoryGameObj.SetActive(value);
     }
 }

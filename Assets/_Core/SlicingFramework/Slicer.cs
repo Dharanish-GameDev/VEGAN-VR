@@ -65,7 +65,7 @@ namespace EzySlice {
          * approprietly before the slice occurs
          * See -> Slice(Mesh, Plane) for more info
          */
-        public static SlicedHull Slice(GameObject obj, Plane pl, TextureRegion crossRegion, Material crossMaterial) {
+        public static SlicedHull Slice(UnityEngine.GameObject obj, Plane pl, TextureRegion crossRegion, Material crossMaterial) {
             
             // cannot continue without a proper filter
             if (!obj.TryGetComponent<MeshFilter>(out var filter)) {

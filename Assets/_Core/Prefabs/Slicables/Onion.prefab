@@ -15,23 +15,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1455248371353441292, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
+      propertyPath: trailRenderer
+      value: 
+      objectReference: {fileID: 1269688186922261493}
+    - target: {fileID: 1455248371353441292, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
       propertyPath: slicablecollider
       value: 
       objectReference: {fileID: 1084700172253087503}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.0508204
+      value: 1.06
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.999
+      value: 1.166
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.569
+      value: -0.771
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
@@ -73,6 +78,66 @@ PrefabInstance:
       propertyPath: m_Name
       value: Onion
       objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.ctime0
+      value: 578
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.ctime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.031446457
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.b
+      value: 0.9687048
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.g
+      value: 0.96781176
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.r
+      value: 0.9937107
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.b
+      value: 0.9687048
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.g
+      value: 0.96781176
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.r
+      value: 0.9937107
+      objectReference: {fileID: 0}
+    - target: {fileID: 6949448927121772132, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 7355168471019192341, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_Mesh
@@ -94,6 +159,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1084700172253087503}
   m_SourcePrefab: {fileID: 100100000, guid: f72ba4248435d0c48851fafeb9800d31, type: 3}
+--- !u!96 &1269688186922261493 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+    type: 3}
+  m_PrefabInstance: {fileID: 5750331898928017769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9017681909331316179 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3668311151237364922, guid: f72ba4248435d0c48851fafeb9800d31,

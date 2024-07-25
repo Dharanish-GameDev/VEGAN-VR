@@ -86,6 +86,20 @@ namespace VeganVR.Player.Local
             }
         }
 
+        public void DetachInteractablesFromDirectInteractors()
+        {
+            leftHandDirectInteractor.allowSelect = false;
+            rightHandDirectInteractor.allowSelect = false;
+
+            Invoke(nameof(EnableSelectForInteractors), 3);
+        }
+
+        private void EnableSelectForInteractors()
+        {
+            leftHandDirectInteractor.allowSelect = true;
+            rightHandDirectInteractor.allowSelect = true;
+        }
+
         #endregion
     }
 }

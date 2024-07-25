@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using VeganVR.UI;
 
 public class Katana : XRGrabInteractable
 {
@@ -27,6 +28,8 @@ public class Katana : XRGrabInteractable
 
     // Hidden
     private bool hasHit;
+    Vector3 effectPosition;
+    Quaternion effectRotation;
 
     #endregion
 
@@ -37,6 +40,7 @@ public class Katana : XRGrabInteractable
     #endregion
 
     #region LifeCycle Methods
+
 
     public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
     {
@@ -80,6 +84,14 @@ public class Katana : XRGrabInteractable
         
         if(hull != null)
         {
+            // Calculate the effect position and rotation
+            effectPosition = (startSlicePoint.position + endSlicePoint.position) / 2;
+            effectRotation = Quaternion.LookRotation(planeNormal);
+
+            // Trigger the sword cutting effect
+            netSword.SwordEffect.TriggerSwordCuttingEffect(effectPosition, effectRotation);
+
+
             GameObject upperHull = hull.CreateUpperHull(target, crossSectionMat);
             SetUpSlicedObject(upperHull);
 
@@ -89,11 +101,15 @@ public class Katana : XRGrabInteractable
             Destroy(upperHull,1f);  // Destroying the generated hulls 
             Destroy(lowerHull,1f);
 
-            SlicableTest slicable = target.GetComponent<SlicableTest>();
+            Slicable slicable = target.GetComponent<Slicable>();
             slicable.TurnOffColliderLocally();
-
-            netSword.DisableSlicable(slicable.NetworkObjectId);
-            
+            //if (!slicable.IsSafe)
+            //{
+            //    GameflowManager.Instance.TimerManager.StopTimerServerRpc();
+            //    ChangeCanPlayBoolToFalseServerRpc();
+            //    ChangeGameStateServerRpc();
+            //}
+            netSword.DisableSlicable(slicable.NetworkObjectId, slicable.IsSafe);
         }
     }
 
@@ -105,11 +121,21 @@ public class Katana : XRGrabInteractable
         slicedObject.GetComponent<Rigidbody>().AddExplosionForce(cutForce, slicedObject.transform.position, 1);
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeCanPlayBoolToFalseServerRpc()
+    {
+        
+        GameflowManager.Instance.ChangeCanPlayBooleanClientRpc(false);
+    }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeGameStateServerRpc()
+    {
+        GameflowManager.Instance.ChangeGameState();
+    }
     #endregion
 
     #region Public Methods
-
 
     #endregion
 }

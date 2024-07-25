@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1455248371353441292, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: trailRenderer
+      value: 
+      objectReference: {fileID: 7616085405615855799}
     - target: {fileID: 2138645858896489789, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -16,17 +21,17 @@ PrefabInstance:
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.05
+      value: 2.57
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.926
+      value: 1.166
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.934
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
@@ -88,6 +93,26 @@ PrefabInstance:
       propertyPath: m_Direction
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.42352945
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.7137255
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0.93725497
+      objectReference: {fileID: 0}
+    - target: {fileID: 6949448927121772132, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 7355168471019192341, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_Mesh
@@ -104,3 +129,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f72ba4248435d0c48851fafeb9800d31, type: 3}
+--- !u!96 &7616085405615855799 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+    type: 3}
+  m_PrefabInstance: {fileID: 4026881740549419563}
+  m_PrefabAsset: {fileID: 0}

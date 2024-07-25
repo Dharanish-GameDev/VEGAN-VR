@@ -1,0 +1,5 @@
+Cheats to be Removed
+
+ChangeGameStateToSecondSetServerRpc() from SideSelection UI
+ChangeGameStateChoosingSideServerRpc() from SideSelection UI
+TransferCannonOwnershipToClient(ulong clientId) from Cannon Rotator

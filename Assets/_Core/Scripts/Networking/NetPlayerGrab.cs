@@ -9,7 +9,7 @@ public class NetPlayerGrab : NetworkBehaviour
 {
     #region Private Variables
 
-    [SerializeField] private List<GameObject> handsList = new List<GameObject>();
+    [SerializeField] private List<UnityEngine.GameObject> handsList = new List<UnityEngine.GameObject>();
 
     #endregion
 
@@ -65,7 +65,7 @@ public class NetPlayerGrab : NetworkBehaviour
         if (IsClient && IsOwner)
         {
             CheckAndDisableHandOnNet(args);
-;
+            ;
             if (args.interactableObject.transform.TryGetComponent<NetworkObject>(out NetworkObject networkObjectSelected))
             {
                 RequestGrabbaleOwnershipServerRpc(OwnerClientId, networkObjectSelected);

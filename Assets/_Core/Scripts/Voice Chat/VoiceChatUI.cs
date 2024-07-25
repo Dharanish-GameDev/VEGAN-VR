@@ -14,8 +14,8 @@ namespace VeganVR.VoiceChat
 
         [Header("Voice Chat")]
         [SerializeField] private Button voiceChatToggleButton;
-        [SerializeField] private GameObject vCEnableIcon;
-        [SerializeField] private GameObject vCDisableIcon;
+        [SerializeField] private UnityEngine.GameObject vCEnableIcon;
+        [SerializeField] private UnityEngine.GameObject vCDisableIcon;
         [SerializeField] private TMP_Dropdown micSelectionDropDown;
 
         private bool isVoiceChatEnabled = true;

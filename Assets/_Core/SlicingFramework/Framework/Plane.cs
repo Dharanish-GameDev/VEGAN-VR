@@ -75,7 +75,7 @@ namespace EzySlice {
 #endif
         }
 
-        public void Compute(GameObject obj) {
+        public void Compute(UnityEngine.GameObject obj) {
             Compute(obj.transform);
         }
 

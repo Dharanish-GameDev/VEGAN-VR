@@ -44,7 +44,8 @@ namespace VeganVR.Player.Network
         {
             if (!IsOwner) return;
             DisableMesh();
-            ChangeInitialPlayerPos();
+            GameflowManager.Instance.CameraFade.TriggerFade();
+            Invoke(nameof(ChangeInitialPlayerPos), 1);
             XR_RigRef.instance.ChangeHandsColorLocally(NetworkHelper.Instance.PlayerColorList[(int)OwnerClientId]);
         }
 

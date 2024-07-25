@@ -7,7 +7,7 @@ public class CannonController : NetworkBehaviour
 {
     public static CannonController Instance { get; private set; }
 
-    [SerializeField] private List<SlicableTest> throwablesList = new List<SlicableTest>();
+    [SerializeField] private List<Slicable> throwablesList = new List<Slicable>();
 
     [SerializeField] private float blastPower = 5;
     [SerializeField] private Transform shotPoint;
@@ -47,10 +47,9 @@ public class CannonController : NetworkBehaviour
                 cooldownTimer = 0f;
             }
         }
-
         if (IsOwner)
         {
-            if(Input.GetKeyDown(KeyCode.X) && !isCooldown)
+            if (Input.GetKeyDown(KeyCode.X) && !isCooldown)
             {
                 SetRandomValue();
             }
@@ -59,8 +58,9 @@ public class CannonController : NetworkBehaviour
     }
     private void RandomAvailableSlicableListIndexChanged(int prev, int newValue)
     {
+        if (!GameflowManager.Instance.CanPlayGame) return;
         if (newValue == -1) return;
-        SlicableTest slicableTest = GetRandomAvailableThrowableList()[newValue];
+        Slicable slicableTest = GetRandomAvailableThrowableList()[newValue];
         slicableTest.ShootThisSlicable();
         Debug.Log(slicableTest.gameObject.name + " is Fired");
         isCooldown = true;
@@ -78,7 +78,7 @@ public class CannonController : NetworkBehaviour
         {
             return -1;
         }
-        if (availableThrowableList.Count == 1)
+        else if (availableThrowableList.Count == 1)
         {
             return 0;
         }
@@ -86,7 +86,7 @@ public class CannonController : NetworkBehaviour
         var randomIndex = Random.Range(0, availableThrowableList.Count);
         return randomIndex;
     }
-    private List<SlicableTest> GetRandomAvailableThrowableList()
+    private List<Slicable> GetRandomAvailableThrowableList()
     {
         var availableThrowableList = throwablesList.Where(throwable => throwable.IsThrowableAvailable).ToList();
         return availableThrowableList;

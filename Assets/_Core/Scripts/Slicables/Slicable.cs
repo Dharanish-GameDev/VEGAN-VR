@@ -1,13 +1,15 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class SlicableTest : NetworkBehaviour
+public class Slicable : NetworkBehaviour
 {
     #region Private Variables
 
     [SerializeField] private Rigidbody rb;
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private Collider slicablecollider;
+    [SerializeField] private SlicableType scicableType;
 
     private CannonController cannonController;
     private SlicableStateEnum slicableState = SlicableStateEnum.Available;
@@ -16,7 +18,7 @@ public class SlicableTest : NetworkBehaviour
 
     #region Properties
 
-    public SlicableStateEnum SlicableState => slicableState;
+    public bool IsSafe => scicableType == SlicableType.Safe;
 
     public bool IsThrowableAvailable => slicableState == SlicableStateEnum.Available;
 
@@ -35,11 +37,21 @@ public class SlicableTest : NetworkBehaviour
 
     #region Private Methods
 
-   
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(GameflowManager.Instance.SlicabbleBlockerList.Contains(collision.gameObject))
+        {
+            if(IsServer)
+            {
+                TurnoffSlicableClientRpc();
+            }
+        }
+    }
 
     private void TurnOnSlicable()
     {
         meshRenderer.enabled = true;
+        trailRenderer.enabled = true;
         rb.isKinematic = false;
         slicablecollider.enabled = true;
     }
@@ -67,6 +79,7 @@ public class SlicableTest : NetworkBehaviour
     public void TurnOffSlicable()
     {
         meshRenderer.enabled = false;
+        trailRenderer.enabled = false;
         slicablecollider.enabled = false;
         rb.isKinematic = true;
         ChangeSlicableState(SlicableStateEnum.Available);
@@ -75,6 +88,20 @@ public class SlicableTest : NetworkBehaviour
     {
         slicablecollider.enabled = false;
     }
+
+    [ClientRpc]
+    public void TurnoffSlicableClientRpc()
+    {
+        TurnOffSlicable();
+    }
+
+    [ServerRpc]
+    public void TurnOffSlicableServerRpc()
+    {
+        TurnoffSlicableClientRpc();
+    }
+
+    
     #endregion
 }
 
@@ -82,4 +109,10 @@ public enum SlicableStateEnum
 {
     Available,
     Travelling,
+}
+
+public enum SlicableType
+{
+    Safe,
+    UnSafe
 }

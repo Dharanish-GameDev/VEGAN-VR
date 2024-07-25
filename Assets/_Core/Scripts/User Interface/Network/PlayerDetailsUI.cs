@@ -10,7 +10,7 @@ public class PlayerDetailsUI : NetworkBehaviour
 
 	#region Private Variables
 
-	[SerializeField] private GameObject playerDetailsUI;
+	[SerializeField] private UnityEngine.GameObject playerDetailsUI;
 	[SerializeField] private Image voiceStateImage;
 	[SerializeField] private Sprite speakingSprite;
 	[SerializeField] private Sprite notSpeakingSprite;

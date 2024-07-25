@@ -72,7 +72,11 @@ namespace VeganVR.VoiceChat
             {
                 try
                 {
-                    VivoxService.Instance.Set3DPosition(vrHeadTransform.gameObject, gameVoiceChannel);
+                    if (VivoxService.Instance.ActiveChannels.Count > 0)
+                    {
+                        VivoxService.Instance.Set3DPosition(vrHeadTransform.gameObject, gameVoiceChannel);
+                    }
+                    
                 }
                 catch(Exception ex)
                 {

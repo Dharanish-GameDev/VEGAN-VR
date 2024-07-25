@@ -26,17 +26,17 @@ PrefabInstance:
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.125
+      value: 4.32
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.926
+      value: 1.166
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.537
+      value: -0.76
       objectReference: {fileID: 0}
     - target: {fileID: 2156771742807723454, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}
@@ -77,6 +77,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tomato
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.15686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.47058827
+      objectReference: {fileID: 0}
+    - target: {fileID: 6796950846831684252, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0.9686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 6949448927121772132, guid: f72ba4248435d0c48851fafeb9800d31,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
       objectReference: {fileID: 0}
     - target: {fileID: 7355168471019192341, guid: f72ba4248435d0c48851fafeb9800d31,
         type: 3}

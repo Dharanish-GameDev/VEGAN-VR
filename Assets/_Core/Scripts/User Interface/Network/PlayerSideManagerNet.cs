@@ -6,7 +6,7 @@ using VeganVR.Player.Local;
 using QFSW.QC;
 using VeganVR.UI;
 
-public class SideSelectionUI : NetworkBehaviour
+public class PlayerSideManagerNet : NetworkBehaviour
 {
     [Header("References")]
 
@@ -16,16 +16,21 @@ public class SideSelectionUI : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI attackSideStateLabel;
     [SerializeField] private TextMeshProUGUI defendSideStateLabel;
 
-    [SerializeField] private CannonRotator cannonRotator;
-
 
     // Network Vars
     private NetworkVariable<int> selectedCount = new NetworkVariable<int>(0);
 
-    private NetworkVariable<ulong> attackingPlayerId = new NetworkVariable<ulong>(10,NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<ulong> attackingPlayerId = new NetworkVariable<ulong>(10, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     [HideInInspector]
     public bool IsFirstSideSelectionUISpawnCompleted = false;
+
+    private int localAttackingPlayerId;
+    private SFX_Manager sfx_Manager;
+    private AudioSourceRef audioSourceRef;
+
+
+    public int AttackingPlayerId => (int)attackingPlayerId.Value;
     private void Awake()
     {
         // Add listeners to buttons
@@ -49,6 +54,8 @@ public class SideSelectionUI : NetworkBehaviour
         base.OnNetworkSpawn();
         GameflowManager.Instance.gameState.OnValueChanged += OnGameStateNetworkVarChanged;
         selectedCount.OnValueChanged += OnSelectedPlayerCountValueChanged;
+        sfx_Manager = SFX_Manager.instance;
+        audioSourceRef = AudioSourceRef.Instance;
     }
 
     public override void OnDestroy()
@@ -69,9 +76,7 @@ public class SideSelectionUI : NetworkBehaviour
     //To Change to Selected count to Invalid for Second Set Spawning
     private void ChangeSelectedPlayerCountToInvalid()
     {
-        //if (!IsServer) return;
         selectedCount.Value = 10;
-        Debug.Log("Count Changed to Invalid");
     }
 
     //To Change to Selected count to valid for swapping pos
@@ -86,6 +91,7 @@ public class SideSelectionUI : NetworkBehaviour
     {
         if (newValue != 2) return;
         if (!IsServer) return;
+        DoCameraFadeClientRpc();
         if (GameflowManager.Instance.gameState.Value == GameState.ChoosingSides)
         {
             GameflowManager.Instance.ChangeGameState(GameState.PlayingFirstSet);
@@ -95,54 +101,81 @@ public class SideSelectionUI : NetworkBehaviour
 
     private void OnGameStateNetworkVarChanged(GameState previous, GameState currentState)
     {
-        switch(currentState)
+        switch (currentState)
         {
             case GameState.ChoosingSides:
 
                 if (!IsFirstSideSelectionUISpawnCompleted) return;
-                if (!IsServer) return;
 
-                PlayerPosToSideSelectionClientRpc();
+                //Local
+                Invoke(nameof(PlayLobbySFX),7);
+
+                if (!IsServer) return;
+                ChangeKatanasPosToInitialServerRpc();
+                localAttackingPlayerId = (int)attackingPlayerId.Value;
+                NetworkUI.Instance.ScoreCounter.CheckForHighScoresClientRpc(localAttackingPlayerId);
+                Invoke(nameof(DoCameraFadeClientRpc),6);
+                Invoke(nameof(ChangePlayerPosToSelectionSide),7);
                 attackingPlayerId.Value = 10;
                 selectedCount.Value = 0;
                 ClearSelectSideUiClientRpc();
-            break;
+                EnableAndDisableScoreBoardCanvasClientRpc(false);
+                EnableAndDisableSideSelectionCanvasClientRpc(true);
+                break;
 
             case GameState.PlayingFirstSet:
 
-                if (!IsServer) return;
+                //Local
+                SFX_Manager.instance.ChangeClipsOnLoopingAudioSrc(sfx_Manager.GamePlayAudioClips.gamePlayMusic,audioSourceRef.BG_AudioSrc,0.05f);
 
+                if (!IsServer) return;
                 EnableAndDisableSideSelectionCanvasClientRpc(false); // Need to Disable the Side Selection Canvas
+                EnableAndDisableScoreBoardCanvasClientRpc(true);
+                ChangeKatanasPosToInitialServerRpc();
+                Invoke(nameof(EnableCountingText), 1);
                 ChangeSelectedPlayerCountToInvalid();
+
 
                 break;
 
             case GameState.PlayingSecondSet:
-              
-              if(IsHost)
+
+                if (!IsHost) return;
+                ChangeKatanasPosToInitialServerRpc();
                 SwapPlayersByChangingNetVarAfterFirstRoundServerRpc();
-            break;
+                Invoke(nameof(EnableCountingText), 1);
+                break;
         }
+    }
+
+
+    private void EnableCountingText()
+    {
+        EnableAndDisableCountingTextClientRpc(true);
+        localAttackingPlayerId = (int)attackingPlayerId.Value;
+        RotateCountingTextClientRpc(localAttackingPlayerId);
+    }
+
+    private void ChangePlayerPosToSelectionSide()
+    {
+        PlayerPosToSideSelectionClientRpc();
+    }
+
+    private void PlayLobbySFX()
+    {
+        SFX_Manager.instance.ChangeClipsOnLoopingAudioSrc(sfx_Manager.GamePlayAudioClips.lobbyMusic, audioSourceRef.BG_AudioSrc, 0.22f);
     }
 
     #endregion
 
-    #region RPC Methods
+    #region RPC Methods 
 
     [ClientRpc]
     private void ChangePlayersPosClientRpc()
     {
         Vector3 targetPos = NetworkManager.Singleton.LocalClientId == attackingPlayerId.Value ? NetworkHelper.Instance.AttackingPoint.position : NetworkHelper.Instance.DefendingPoint.position;
         XR_RigRef.instance.ChangePlayerPos(targetPos);
-        cannonRotator.TransferCannonOwnershipToClient(attackingPlayerId.Value);
-        if (attackingPlayerId.Value == 0) // Blue is Attacking
-        {
-            Debug.Log("Blue Player Attacking");
-        }
-        else
-        {
-            Debug.Log("Red Player Attacking");
-        }
+        CannonRotator.Instance.TransferCannonOwnershipToClient(attackingPlayerId.Value);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -190,7 +223,6 @@ public class SideSelectionUI : NetworkBehaviour
         }
 
         ChangeSelectedPlayerCountToValid();
-        Debug.Log("Swap Player Called");
     }
 
     [ClientRpc]
@@ -198,7 +230,8 @@ public class SideSelectionUI : NetworkBehaviour
     {
         Vector3 targetPos = NetworkHelper.Instance.SpawnPointList[(int)NetworkManager.Singleton.LocalClientId].position;
         XR_RigRef.instance.ChangePlayerPos(targetPos);
-        cannonRotator.TransferCannonOwnershipToClient(0); // To The Host
+        CannonRotator.Instance.TransferCannonOwnershipToClient(0); // To The Host
+        CannonRotator.Instance.EnableAndDisableDrawTrajectory(false);
     }
 
     [ClientRpc]
@@ -210,14 +243,14 @@ public class SideSelectionUI : NetworkBehaviour
         defendingSelectionBtn.interactable = true;
     }
 
-    [ServerRpc,Command]
+    [ServerRpc(RequireOwnership = false), Command]
     private void ChangeGameStateToSecondSetServerRpc()
     {
         if (!IsServer) return;
-       GameflowManager.Instance.ChangeGameState(GameState.PlayingSecondSet);
+        GameflowManager.Instance.ChangeGameState(GameState.PlayingSecondSet);
     }
 
-    [ServerRpc,Command]
+    [ServerRpc(RequireOwnership = false), Command]
     private void ChangeGameStateChoosingSideServerRpc()
     {
         if (!IsServer) return;
@@ -227,7 +260,49 @@ public class SideSelectionUI : NetworkBehaviour
     [ClientRpc]
     private void EnableAndDisableSideSelectionCanvasClientRpc(bool value)
     {
-       NetworkUI.Instance.EnableAndDisableSideSelectionCanvas(value);
+        NetworkUI.Instance.EnableAndDisableSideSelectionCanvas(value);
+    }
+
+    [ClientRpc]
+    private void EnableAndDisableScoreBoardCanvasClientRpc(bool value)
+    {
+        NetworkUI.Instance.EnableAndDisableScoreBoardCanvas(value);
+    }
+
+    [ClientRpc]
+    private void EnableAndDisableCountingTextClientRpc(bool value)
+    {
+        NetworkUI.Instance.EnableAndDisableCountingText(value);
+    }
+
+    [ClientRpc]
+    private void RotateCountingTextClientRpc(int value)
+    {
+        NetworkUI.Instance.RotateCountingTextTowardsPlayer(value);
+    }
+
+    [ClientRpc]
+    private void DoCameraFadeClientRpc()
+    {
+        GameflowManager.Instance.CameraFade.TriggerFade();
+    }
+
+
+    [ServerRpc]
+    private void ChangeKatanasPosToInitialServerRpc()
+    {
+        ChangeKatanasPosToInitialClientRpc();
+    }
+    [ClientRpc]
+    private void ChangeKatanasPosToInitialClientRpc()
+    {
+        XR_RigRef.instance.DetachInteractablesFromDirectInteractors();
+        Invoke(nameof(ChangeKatanaInitialPos), 1);
+    }
+
+    private void ChangeKatanaInitialPos()
+    {
+        GameflowManager.Instance.ChangeKatanasPosToInitial();
     }
 
     #endregion
