@@ -3,7 +3,6 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using VeganVR.Player.Local;
-using QFSW.QC;
 using VeganVR.UI;
 
 public class PlayerSideManagerNet : NetworkBehaviour
@@ -108,6 +107,7 @@ public class PlayerSideManagerNet : NetworkBehaviour
                 if (!IsFirstSideSelectionUISpawnCompleted) return;
 
                 //Local
+                NetworkHelper.Instance.SetCanActivateRayBoolean(true);
                 Invoke(nameof(PlayLobbySFX),7);
 
                 if (!IsServer) return;
@@ -126,7 +126,8 @@ public class PlayerSideManagerNet : NetworkBehaviour
             case GameState.PlayingFirstSet:
 
                 //Local
-                SFX_Manager.instance.ChangeClipsOnLoopingAudioSrc(sfx_Manager.GamePlayAudioClips.gamePlayMusic,audioSourceRef.BG_AudioSrc,0.05f);
+                SFX_Manager.instance.ChangeClipsOnLoopingAudioSrc(sfx_Manager.GamePlayAudioClips.gamePlayMusic,audioSourceRef.BG_AudioSrc,0.1f);
+                NetworkHelper.Instance.SetCanActivateRayBoolean(false);
 
                 if (!IsServer) return;
                 EnableAndDisableSideSelectionCanvasClientRpc(false); // Need to Disable the Side Selection Canvas
@@ -163,7 +164,7 @@ public class PlayerSideManagerNet : NetworkBehaviour
 
     private void PlayLobbySFX()
     {
-        SFX_Manager.instance.ChangeClipsOnLoopingAudioSrc(sfx_Manager.GamePlayAudioClips.lobbyMusic, audioSourceRef.BG_AudioSrc, 0.22f);
+        SFX_Manager.instance.ChangeClipsOnLoopingAudioSrc(sfx_Manager.GamePlayAudioClips.lobbyMusic, audioSourceRef.BG_AudioSrc, 1.0f);
     }
 
     #endregion
@@ -243,14 +244,14 @@ public class PlayerSideManagerNet : NetworkBehaviour
         defendingSelectionBtn.interactable = true;
     }
 
-    [ServerRpc(RequireOwnership = false), Command]
+    [ServerRpc(RequireOwnership = false)]
     private void ChangeGameStateToSecondSetServerRpc()
     {
         if (!IsServer) return;
         GameflowManager.Instance.ChangeGameState(GameState.PlayingSecondSet);
     }
 
-    [ServerRpc(RequireOwnership = false), Command]
+    [ServerRpc(RequireOwnership = false)]
     private void ChangeGameStateChoosingSideServerRpc()
     {
         if (!IsServer) return;

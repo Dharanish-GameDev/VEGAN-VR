@@ -1,11 +1,7 @@
 using EzySlice;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using VeganVR.UI;
 
 public class Katana : XRGrabInteractable
 {
@@ -103,12 +99,11 @@ public class Katana : XRGrabInteractable
 
             Slicable slicable = target.GetComponent<Slicable>();
             slicable.TurnOffColliderLocally();
-            //if (!slicable.IsSafe)
-            //{
-            //    GameflowManager.Instance.TimerManager.StopTimerServerRpc();
-            //    ChangeCanPlayBoolToFalseServerRpc();
-            //    ChangeGameStateServerRpc();
-            //}
+            AudioSource audioSource = AudioSourceRef.Instance.AvailableDynamicSource;
+            if (audioSource != null)
+            {
+                SFX_Manager.instance.PlayOneShot(SFX_Manager.instance.GamePlayAudioClips.sliceSFX, audioSource, slicable.transform.position, 0.5f);
+            }
             netSword.DisableSlicable(slicable.NetworkObjectId, slicable.IsSafe);
         }
     }

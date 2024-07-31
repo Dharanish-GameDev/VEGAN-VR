@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using Unity.Services.Lobbies.Models;
 using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace VeganVR.Player.Local

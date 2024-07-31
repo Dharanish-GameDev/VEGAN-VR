@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using Unity.Services.Vivox;
-using UnityEngine;
 using VeganVR.UI;
 
 namespace VeganVR.VoiceChat

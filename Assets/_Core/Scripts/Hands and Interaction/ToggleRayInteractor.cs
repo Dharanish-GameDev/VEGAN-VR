@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -19,6 +18,8 @@ public class ToggleRayInteractor : MonoBehaviour
 
     List <IXRInteractable> interactableList = new List<IXRInteractable>();  // List of interactable that direct interactor is selected.
 
+
+	private bool canActivateRay = true;
     #endregion
 
     #region Properties
@@ -66,6 +67,7 @@ public class ToggleRayInteractor : MonoBehaviour
 	#region Public Methods
 	public void ActivateRayInteractor()
 	{
+		if (!canActivateRay) return;
 		if (forceToggle || !IsHavingInteractablesOnDirectInteractor())
 		{
             SwitchRayInteractor(true);
@@ -75,6 +77,11 @@ public class ToggleRayInteractor : MonoBehaviour
 	{
 		if (!isSwitched) return;
 		SwitchRayInteractor(false);
+	}
+
+	public void SetCanActivateRayBoolean(bool val)
+	{
+		canActivateRay = val;
 	}
 	#endregion
 }

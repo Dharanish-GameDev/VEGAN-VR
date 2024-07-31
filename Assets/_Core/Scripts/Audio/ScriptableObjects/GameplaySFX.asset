@@ -21,3 +21,5 @@ MonoBehaviour:
   countDownSFX: {fileID: 8300000, guid: 0357873d719c51f4a9cba2d91766fb0b, type: 3}
   tenSecondsRemaining: {fileID: 8300000, guid: 8f5a20af850e9be4588a60377ce09125, type: 3}
   timeExpired: {fileID: 8300000, guid: b4b7dd2eaf1e69944874ffb0268f3c2c, type: 3}
+  sliceSFX: {fileID: 8300000, guid: b9dc5a56235d3c54e8d030d1ee4ae928, type: 3}
+  cannonPopSFX: {fileID: 8300000, guid: 2d121f0a96bfb6b4a960afc1ea440f1a, type: 3}

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
-using VeganVR.UI;
 
 public class NetworkHelper : MonoBehaviour
 {
@@ -16,6 +14,8 @@ public class NetworkHelper : MonoBehaviour
 	[Space(10)]
     [SerializeField] private Transform attackingPoint;
 	[SerializeField] private Transform defendingPoint;
+
+	[SerializeField] private List<ToggleRayInteractor> ToggleRayinteractorList;
 
 
 	#endregion
@@ -51,6 +51,17 @@ public class NetworkHelper : MonoBehaviour
 	#endregion
 
 	#region Public Methods
+
+	public void SetCanActivateRayBoolean(bool value)
+	{
+		foreach (var toggleRay in ToggleRayinteractorList)
+		{
+			toggleRay.SetCanActivateRayBoolean(value);
+		}
+	}
+
+	
+
 
 	#endregion
 }

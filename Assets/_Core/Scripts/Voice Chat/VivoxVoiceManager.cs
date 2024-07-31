@@ -1,8 +1,8 @@
 using UnityEngine;
 using Unity.Services.Core;
 using Unity.Services.Vivox;
-using System;
 using System.Threading.Tasks;
+
 #if AUTH_PACKAGE_PRESENT
 using Unity.Services.Authentication;
 #endif

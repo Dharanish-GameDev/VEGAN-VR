@@ -64,7 +64,7 @@ public class Net_Sword : NetworkBehaviour
                     slicable.TurnoffSlicableClientRpc();
                     if (canAddScore)
                     {
-                        NetworkUI.Instance.ScoreCounter.AddScore(0);
+                        NetworkUI.Instance.ScoreCounter.AddScoreServerRpc(0);
                     }
                     else  // It means he Cutted Chicken
                     {
@@ -80,7 +80,7 @@ public class Net_Sword : NetworkBehaviour
             
             if(canAddScore)
             {
-                NetworkUI.Instance.ScoreCounter.AddScore(1);
+                NetworkUI.Instance.ScoreCounter.AddScoreServerRpc(1);
             }
             else // It means he Cutted Chicken
             {

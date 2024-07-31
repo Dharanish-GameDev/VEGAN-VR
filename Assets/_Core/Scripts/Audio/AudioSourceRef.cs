@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,11 +10,8 @@ public class AudioSourceRef : MonoBehaviour
 	[Header("Audio_Sources")]
 	[SerializeField] private AudioSource bgAudioSource;
 	[SerializeField] private AudioSource middleFieldSource;
-
-
-	[Space(10)]
-	[Header("Transform_Refs")]
-	[SerializeField] private Transform  cannonTransform;
+	[SerializeField] private List<AudioSource> dynamicSources;
+	[SerializeField] private AudioSource cannonSource;
 
 	#endregion
 
@@ -23,12 +19,27 @@ public class AudioSourceRef : MonoBehaviour
 
 	public AudioSource BG_AudioSrc => bgAudioSource;
 	public AudioSource MiddleFieldSrc => middleFieldSource;
+    public AudioSource AvailableDynamicSource
+	{
+		get
+		{
+			foreach (AudioSource audioSrc in dynamicSources)
+			{
+				if (!audioSrc.isPlaying)
+				{
+					return audioSrc;
+				}
+			}
+			return null; // Return null if all audio sources are playing
+		}
+	}
 
-	#endregion
+	public AudioSource CannonSrc => cannonSource;
+    #endregion
 
-	#region LifeCycle Methods
+        #region LifeCycle Methods
 
-	private void Awake()
+    private void Awake()
 	{
 		Instance = this;
 	}

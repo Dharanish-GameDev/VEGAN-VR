@@ -10,18 +10,33 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.026
+      value: -0.042
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.166
+      value: 1.29
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.137
+      value: 8.587
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
         type: 3}
@@ -57,6 +72,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 715b0e58518923e4e8bb226987fb60b5,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 715b0e58518923e4e8bb226987fb60b5,
         type: 3}
@@ -132,11 +152,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1233392875522653053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,6 +173,7 @@ MonoBehaviour:
   meshRenderer: {fileID: 156732089162874432}
   trailRenderer: {fileID: 6117684403370402544}
   slicablecollider: {fileID: 7425345885018813106}
+  scicableType: 1
 --- !u!114 &3449495828799795297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +267,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.8901191
+        value: 0.40456915
         inSlope: 0
         outSlope: 0
         tangentMode: 0

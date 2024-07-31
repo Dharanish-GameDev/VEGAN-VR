@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Services.Vivox;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
 using UnityEngine.Android;
 using System;
-using Unity.Netcode;
 
 namespace VeganVR.VoiceChat
 {
@@ -260,16 +257,6 @@ namespace VeganVR.VoiceChat
                 }
             }
 
-        }
-        public void MuteUserMic()
-        {
-           VivoxService.Instance.UnmuteInputDevice();
-            Debug.Log("Muted Mic");
-        }
-        public void UnMuteUserMic()
-        {
-            VivoxService.Instance.UnmuteInputDevice();
-            Debug.Log("UnMuted Mic");
         }
 
         public async void Join3DChannelAsync()

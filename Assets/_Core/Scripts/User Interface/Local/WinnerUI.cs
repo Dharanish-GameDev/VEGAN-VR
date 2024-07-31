@@ -1,10 +1,6 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-using VeganVR.Player.Local;
-
 public class WinnerUI : MonoBehaviour
 {
 	#region Private Variables

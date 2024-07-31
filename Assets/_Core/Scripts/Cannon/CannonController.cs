@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-
 public class CannonController : NetworkBehaviour
 {
     public static CannonController Instance { get; private set; }
@@ -62,6 +61,9 @@ public class CannonController : NetworkBehaviour
         if (newValue == -1) return;
         Slicable slicableTest = GetRandomAvailableThrowableList()[newValue];
         slicableTest.ShootThisSlicable();
+
+        SFX_Manager.instance.PlayOneShot(SFX_Manager.instance.GamePlayAudioClips.cannonPopSFX, AudioSourceRef.Instance.CannonSrc, 0.75f);
+        
         Debug.Log(slicableTest.gameObject.name + " is Fired");
         isCooldown = true;
     }
@@ -90,5 +92,12 @@ public class CannonController : NetworkBehaviour
     {
         var availableThrowableList = throwablesList.Where(throwable => throwable.IsThrowableAvailable).ToList();
         return availableThrowableList;
+    }
+
+    public void ShootByTriggers()
+    {
+        if (!IsOwner) return;
+        if (isCooldown) return;
+        SetRandomValue();
     }
 }

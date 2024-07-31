@@ -61,7 +61,8 @@ public class ScoreCounter : NetworkBehaviour
     }
 
     // Example method to add score (can be called from any script)
-    public void AddScore(ulong playerId)
+    [ServerRpc(RequireOwnership = false)]
+    public void AddScoreServerRpc(ulong playerId)
     {
         if (IsServer)
         {
